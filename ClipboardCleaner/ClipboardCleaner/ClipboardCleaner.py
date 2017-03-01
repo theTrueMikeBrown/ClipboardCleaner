@@ -1,5 +1,4 @@
 #add configuration
-#display no console window
 #make it work as a system tray thing
 #pyw if it shows an unwanted window
 import os
