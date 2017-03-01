@@ -5,7 +5,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>a5723a48-47e8-4b55-a0fc-96f422c246cc</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ClipboardCleaner.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

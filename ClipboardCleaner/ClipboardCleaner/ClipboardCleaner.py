@@ -1,3 +1,7 @@
+#add configuration
+#display no console window
+#make it work as a system tray thing
+#pyw if it shows an unwanted window
 import os
 import sys
 import ctypes
@@ -7,12 +11,9 @@ import win32clipboard
 
 byref = ctypes.byref
 user32 = ctypes.windll.user32
+hotkeyId = 1
 
-HOTKEYS = {
-  1 : (0x56, win32con.MOD_SHIFT | win32con.MOD_CONTROL)
-}
-
-def handle_hotkey ():
+def handle_hotkey ():    
   win32clipboard.OpenClipboard()
   try:
     data = win32clipboard.GetClipboardData()
@@ -20,28 +21,21 @@ def handle_hotkey ():
     win32clipboard.SetClipboardText(data)
   finally:
     win32clipboard.CloseClipboard()
-    raw_input()
 
-HOTKEY_ACTIONS = {
-  1 : handle_hotkey
-}
-
-for id, (vk, modifiers) in HOTKEYS.items ():
-  print "Registering id", id, "for key", vk
-  if not user32.RegisterHotKey (None, id, modifiers, vk):
+def reg_hotkey ():
+  if not user32.RegisterHotKey (None, hotkeyId, win32con.MOD_SHIFT | win32con.MOD_CONTROL, 0x56):
     print "Unable to register id", id
-
+    
+reg_hotkey ()
 try:
   msg = wintypes.MSG ()
   while user32.GetMessageA (byref (msg), None, 0, 0) != 0:
-    if msg.message == win32con.WM_HOTKEY:
-      action_to_take = HOTKEY_ACTIONS.get (msg.wParam)
-      if action_to_take:
-        action_to_take ()
+    if msg.message == win32con.WM_HOTKEY:            
+      if msg.wParam == hotkeyId:
+        handle_hotkey ()  
 
     user32.TranslateMessage (byref (msg))
     user32.DispatchMessageA (byref (msg))
 
-finally:
-  for id in HOTKEYS.keys ():
-    user32.UnregisterHotKey (None, id)
+finally:    
+  user32.UnregisterHotKey (None, 1)
